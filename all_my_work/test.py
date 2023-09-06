@@ -10,7 +10,35 @@
 """
 import torch
 
+
+def conv():
+    # 创建一个示例数据张量
+    X = torch.randn(3, 4, 5, 5)  # 3个样本，4个通道，每个通道的特征图是5x5的
+
+    # 计算通道维度上的均值
+    mean = X.mean(dim=(0, 2, 3), keepdim=True)
+
+    # 计算通道维度上的方差
+    var = ((X - mean) ** 2).mean(dim=(0, 2, 3), keepdim=True)
+
+    print("特征维度上的均值：", mean.shape, mean)
+    print("特征维度上的方差：", var.shape, var)
+
+
+def full():
+    # 创建一个示例数据集
+    X = torch.tensor([[1.0, 2.0, 3.0, 4.0],
+                      [2.0, 3.0, 4.0, 5.0],
+                      [3.0, 4.0, 5.0, 6.0],
+                      [4.0, 5.0, 6.0, 7.0],
+                      [5.0, 6.0, 7.0, 8.0]])
+
+    # 计算特征维度上的均值
+    mean = X.mean(dim=0)
+
+    # 计算特征维度上的方差
+    var = ((X - mean) ** 2).mean(dim=0)
+
+
 if __name__ == "__main__":
-    tensor = torch.ones(2, 2, 2, 3)
-    dd2 = tensor.mean(dim=(0, 2, 3), keepdim=True)
-    print(tensor, '\n', dd2)
+    conv()
