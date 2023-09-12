@@ -11,6 +11,11 @@
 import torch
 
 
+def cat_():
+    data = [torch.arange(24).reshape(2, 3, 4), torch.arange(24).reshape(2, 3, 4)]
+    return torch.cat(data, dim=0).shape
+
+
 def conv():
     # 创建一个示例数据张量
     X = torch.randn(3, 4, 5, 5)  # 3个样本，4个通道，每个通道的特征图是5x5的
@@ -41,4 +46,4 @@ def full():
 
 
 if __name__ == "__main__":
-    conv()
+    print(cat_())
