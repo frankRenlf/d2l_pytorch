@@ -46,4 +46,7 @@ def full():
 
 
 if __name__ == "__main__":
-    print(cat_())
+    arr = torch.arange(0, 12).reshape(2, 2, -1)
+    arr2 = torch.arange(0, 12).reshape(2, 2, -1)
+    arr2 = arr2.permute(0, 2, 1)
+    print(torch.bmm(arr, arr2))
