@@ -8,6 +8,8 @@
     @github : https://github.com/frankRenlf
     @Description : 
 """
+import numpy as np
+from d2l import torch as d2l
 import torch
 
 
@@ -45,8 +47,28 @@ def full():
     var = ((X - mean) ** 2).mean(dim=0)
 
 
+def sequence_mask(X, valid_len, value=0):
+    """Mask irrelevant entries in sequences.
+
+    Defined in :numref:`sec_seq2seq_decoder`"""
+    # print(X)
+    maxlen = X.size(1)
+    mask = torch.arange((maxlen), dtype=torch.float32)[None, :] < valid_len[:, None]
+    X[~mask] = value
+    return X
+
+
 if __name__ == "__main__":
-    arr = torch.arange(0, 12).reshape(2, 2, -1)
-    arr2 = torch.arange(0, 12).reshape(2, 2, -1)
-    arr2 = arr2.permute(0, 2, 1)
-    print(torch.bmm(arr, arr2))
+    batch = 2
+    num_heads = 3
+    num_steps = 6
+    x = torch.arange(0, 72).reshape(batch, num_steps, num_steps)
+    dec_valid_lens = torch.arange(
+        1, num_steps + 1).repeat(batch, 1)
+    valid_lens = dec_valid_lens
+    valid_lens = valid_lens.reshape(-1)
+    print(valid_lens)
+    shape = x.shape
+    X = sequence_mask(x.reshape(-1, shape[-1]), valid_lens,
+                      value=-1e6)
+    print(X)

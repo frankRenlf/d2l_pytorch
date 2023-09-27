@@ -2,7 +2,14 @@
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/data/VOCdevkit" />
+      <excludeFolder url="file://$MODULE_DIR$/data/banana-detection" />
       <excludeFolder url="file://$MODULE_DIR$/data/cifar-10/train" />
+      <excludeFolder url="file://$MODULE_DIR$/data/cifar-10/train_valid_test" />
+      <excludeFolder url="file://$MODULE_DIR$/data/classify-leaves" />
+      <excludeFolder url="file://$MODULE_DIR$/data/fra-eng" />
+      <excludeFolder url="file://$MODULE_DIR$/data/pre-resnext-model" />
+      <excludeFolder url="file://$MODULE_DIR$/data/wikitext-2" />
     </content>
     <orderEntry type="jdk" jdkName="d2l-zh" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
