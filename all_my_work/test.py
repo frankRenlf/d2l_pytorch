@@ -47,7 +47,7 @@ def full():
     var = ((X - mean) ** 2).mean(dim=0)
 
 
-def sequence_mask(X, valid_len, value=0):
+def sequence_mask(X, valid_len, value=0.0):
     """Mask irrelevant entries in sequences.
 
     Defined in :numref:`sec_seq2seq_decoder`"""
