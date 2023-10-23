@@ -13,11 +13,13 @@ import torch.nn as nn
 import torch
 
 
-def pseudo_A(A, b):
+def pseudo_A(A, b, u0):
     # Ax = b   =>   x = (A.T @ A)^-1 @ A @ b
     if b is None:
         P = A @ np.linalg.inv(A.T @ A) @ A.T
         print(P)
+        u1 = P @ u0
+        print(u1)
     else:
         x = np.linalg.inv(A.T @ A) @ A.T @ b
         print(x)
@@ -33,6 +35,8 @@ def orthogonal():
 
 
 if __name__ == "__main__":
-    pseudo_A(A=np.array([[2], [1], [2]]), b=None)
+    pseudo_A(A=np.array([[1], [2], [3]]), b=np.array([[4], [5], [8]]), u0=np.array([[9], [9], [0]]))
+    # pseudo_A(A=np.array([[2], [1], [2]]), b=None, u0=np.array([[9], [9], [0]]))
     # orthogonal()
     # print(np.__version__)
+    print(19/7)
