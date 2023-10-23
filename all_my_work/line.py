@@ -27,16 +27,17 @@ def pseudo_A(A, b, u0):
 
 
 def orthogonal():
-    A = np.array([[1], [1], [1]], dtype=np.float32)
-    b = np.array([[1], [0], [2]])
+    A = np.array([[1], [2], [3]], dtype=np.float32)
+    b = np.array([[1], [1], [1]])
     # Ax = b   =>   x = (A.T @ A)^-1 @ A @ b
     B = b - A @ (A.T @ b / (A.T @ A))
     print(B)
+    print(b - (6 / 14) * A)
 
 
 if __name__ == "__main__":
-    pseudo_A(A=np.array([[1], [2], [3]]), b=np.array([[4], [5], [8]]), u0=np.array([[9], [9], [0]]))
+    # pseudo_A(A=np.array([[1], [2], [3]]), b=np.array([[4], [5], [8]]), u0=np.array([[9], [9], [0]]))
     # pseudo_A(A=np.array([[2], [1], [2]]), b=None, u0=np.array([[9], [9], [0]]))
-    # orthogonal()
+    orthogonal()
     # print(np.__version__)
-    print(19/7)
+    # print(19/7)
