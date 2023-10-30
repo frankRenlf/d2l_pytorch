@@ -39,19 +39,19 @@ def orthogonal():
 def test_eig():
     A = np.array([[4, 4],
                   [-3, 3]])
-    U, D, V = np.linalg.svd(A)
+    U, D, Vt = np.linalg.svd(A)
     # print("U:", U)
     # print("D:", D)
-    print("V:", V)
+    print("V:", Vt)
 
 
 def test_eig2():
     A = np.array([[4, 4],
                   [-3, 3]])
     D, Q = np.linalg.eig(A.T @ A)
-    print('D:', D)
+    # print('D:', D)
     print("Q:", Q)
-    print(1 / np.sqrt(2) * np.array([[1, 1], [-1, 1]]))
+    print(1 / np.sqrt(2))
 
 
 if __name__ == "__main__":
