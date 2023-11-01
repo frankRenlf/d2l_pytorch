@@ -14,7 +14,7 @@ import numpy as np
 import torch.nn as nn
 import torch
 import torchvision
-from torchvision.models import ResNet152_Weights
+from torchvision.models import ResNet152_Weights, ViT_B_16_Weights
 
 
 def pseudo_A(A, b, u0):
@@ -159,7 +159,7 @@ def test_pretrain():
             print(f"{name} requires_grad={param.requires_grad}")
 
     net = get_net([torch.device('cpu')])
-    print_requires_grad(net)
+    print(net)
 
 
 def seq_test():
@@ -174,7 +174,26 @@ def seq_test():
         return finetune_net
 
     net = get_net([torch.device('cpu')])
-    print(net(data).shape)
+    print(net[:-1])
+
+
+def net_print():
+    def get_net(devices):
+        finetune_net = nn.Sequential()
+        finetune_net.features = torchvision.models.vit_b_16(weights=ViT_B_16_Weights.IMAGENET1K_V1)
+        finetune_net[0].heads = nn.Sequential(nn.Linear(768, 256),
+                                              nn.ReLU(), nn.Dropout(0.5),
+                                              nn.Linear(256, 120))
+        # 将模型参数分配给用于计算的CPU或GPU
+        finetune_net = finetune_net.to(devices[0])
+        # 冻结参数
+        for param in finetune_net.features.parameters():
+            param.requires_grad = False
+        return finetune_net
+
+    net = get_net([torch.device('cpu')])
+    # nn.Dropout()
+    print(net)
 
 
 if __name__ == "__main__":
@@ -193,4 +212,5 @@ if __name__ == "__main__":
     # test_eig()
     # test_eig2()
     # test_pretrain()
-    seq_test()
+    # seq_test()
+    net_print()
