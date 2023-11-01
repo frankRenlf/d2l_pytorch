@@ -181,19 +181,26 @@ def net_print():
     def get_net(devices):
         finetune_net = nn.Sequential()
         finetune_net.features = torchvision.models.vit_b_16(weights=ViT_B_16_Weights.IMAGENET1K_V1)
-        finetune_net[0].heads = nn.Sequential(nn.Linear(768, 256),
-                                              nn.ReLU(), nn.Dropout(0.5),
-                                              nn.Linear(256, 120))
+        finetune_net.features.heads = nn.Sequential(nn.Linear(768, 256),
+                                                    nn.ReLU(), nn.Dropout(0.5),
+                                                    nn.Linear(256, 120))
         # 将模型参数分配给用于计算的CPU或GPU
         finetune_net = finetune_net.to(devices[0])
         # 冻结参数
         for param in finetune_net.features.parameters():
             param.requires_grad = False
+        for param in finetune_net.features.heads.parameters():
+            param.requires_grad = True
         return finetune_net
 
     net = get_net([torch.device('cpu')])
-    # nn.Dropout()
-    print(net)
+
+    for param in net.features.parameters():
+        if param.requires_grad:
+            print(param.shape, param.requires_grad)
+            print(param)
+    # for name, param in net.named_parameters():
+    #     print(f"{name} requires_grad={param.requires_grad}")
 
 
 if __name__ == "__main__":
