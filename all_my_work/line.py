@@ -194,11 +194,11 @@ def net_print():
         return finetune_net
 
     net = get_net([torch.device('cpu')])
-
-    for param in net.features.parameters():
-        if param.requires_grad:
-            print(param.shape, param.requires_grad)
-            print(param)
+    print(net)
+    # for param in net.features.parameters():
+    #     if param.requires_grad:
+    #         print(param.shape, param.requires_grad)
+    #         print(param)
     # for name, param in net.named_parameters():
     #     print(f"{name} requires_grad={param.requires_grad}")
 
