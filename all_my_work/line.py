@@ -203,6 +203,54 @@ def net_print():
     #     print(f"{name} requires_grad={param.requires_grad}")
 
 
+class VisionTransformer(nn.Module):
+    def __init__(self, patch_size, channels, hidden_dim, num_heads, num_layers, num_classes):
+        super(VisionTransformer, self).__init__()
+        self.patch_size = patch_size
+        self.embedding = nn.Linear(patch_size * patch_size * channels, hidden_dim)
+        self.positional_embedding = nn.Parameter(
+            torch.randn(1, (224 // patch_size) * (224 // patch_size) + 1, hidden_dim))
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=512,
+            nhead=8,
+            dim_feedforward=2048,
+            dropout=0.1,
+            activation=nn.functional.relu,
+            layer_norm_eps=1e-5,
+            batch_first=True
+        )
+        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
+        self.test = nn.Transformer()
+        self.cls_token = nn.Parameter(torch.randn(1, 1, hidden_dim))
+        self.fc = nn.Linear(hidden_dim, num_classes)
+
+    def forward(self, x):
+        # Extract patches
+        patches = x.unfold(2, self.patch_size, self.patch_size).unfold(3, self.patch_size, self.patch_size)
+        patches = patches.contiguous().view(x.shape[0], -1, self.patch_size * self.patch_size * x.shape[1])
+
+        # Embed patches
+        x = self.embedding(patches)
+
+        # Add positional embedding
+        x = x + self.positional_embedding[:, :-1]
+        cls_tokens = self.cls_token.repeat(x.shape[0], 1, 1)
+        x = torch.cat((cls_tokens, x), dim=1)
+        x = x + self.positional_embedding
+
+        # Pass through transformer
+        x = self.transformer(x)
+
+        # Classifier on the CLS token
+        x = self.fc(x[:, 0])
+        return x
+
+
+def get_myvit():
+    net = VisionTransformer(16, 3, 512, 8, 6, 120)
+    return net
+
+
 if __name__ == "__main__":
     # pseudo_A(A=np.array([[1], [2], [3]]), b=np.array([[4], [5], [8]]), u0=np.array([[9], [9], [0]]))
     # pseudo_A(A=np.array([[2], [1], [2]]), b=None, u0=np.array([[9], [9], [0]]))
@@ -220,4 +268,7 @@ if __name__ == "__main__":
     # test_eig2()
     # test_pretrain()
     # seq_test()
-    net_print()
+    img = torch.arange(0, 3 * 224 * 224, dtype=torch.float32).reshape(1, 3, 224, 224)
+    net = get_myvit()
+    for name, param in net.named_parameters():
+        print(f"{name} requires_grad={param.requires_grad}")
