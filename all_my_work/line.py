@@ -42,11 +42,14 @@ def orthogonal():
 
 def test_eig():
     A = np.array([[4, 4],
+                  [-3, 3],
                   [-3, 3]])
     U, D, Vt = np.linalg.svd(A)
     # print("U:", U)
     # print("D:", D)
     print("V:", Vt)
+    print(U.shape, D.shape, Vt.shape)
+    print(U @ D @ Vt)
 
 
 def test_eig2():
@@ -260,15 +263,8 @@ if __name__ == "__main__":
     # print(19/7)
     from d2l.torch import d2l
 
-    # 2*2*3
-    # A = torch.arange(0, 12).reshape(4, 3)
-    # b = torch.arange(0, 4).reshape(4)
-    # print(d2l.sequence_mask(A, b))
-    # test_eig()
-    # test_eig2()
-    # test_pretrain()
-    # seq_test()
-    img = torch.arange(0, 3 * 224 * 224, dtype=torch.float32).reshape(1, 3, 224, 224)
-    net = get_myvit()
-    for name, param in net.named_parameters():
-        print(f"{name} requires_grad={param.requires_grad}")
+    # A = np.array([[1, 2, 1], [2, 1, 2], [3, 2, 3]])
+    # x, y, z = np.linalg.svd(A)
+    # print(x, y, z)
+    # print(x @ y @ z.T)
+    test_eig()
